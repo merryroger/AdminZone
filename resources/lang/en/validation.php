@@ -125,6 +125,7 @@ return [
     */
 
     'custom' => [
+        'message_sent' => 'Thank you for your e-mail. We`ll be connecting you soon.',
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],

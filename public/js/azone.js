@@ -1,104 +1,39 @@
 'use strict'
 
-let fbPad = null;
 let fbOn = false;
 let ddOn = false;
 let mlt = 0;
-
-function prepareFBPad() {
-    if (fbOn) {
-        return;
-    }
-
-    if (fbPad == null) {
-        fbPad = document.createElement('div');
-        fbPad.className = 'fb_form_pad off';
-        document.body.appendChild(fbPad);
-    }
-
-    fbPad.classList.add('wait');
-    fixAtCenter(fbPad, document.body);
-    fbPad.style.left = ((document.body.offsetWidth - fbPad.offsetWidth) / 2) + 'px';
-    fbPad.style.top = ((document.body.offsetHeight - fbPad.offsetHeight) / 2) + 'px';
-    fbPad.classList.remove('off');
-    fbPad.classList.add('on');
-    fbOn = true;
-}
-
-function closeFBForm() {
-    if (fbOn) {
-        fbPad.classList.remove('on');
-        fbPad.classList.add('off');
-        fbPad.innerHTML = '';
-        fbOn = false;
-    }
-}
-
-function checkForm(fm, url) {
-    let pms = '_token=' + fm._token.value + '&email=' + fm.email.value;
-    sendPostRequest(url, pms, fbResponse);
-    setTimeout(setWaitResponse, 10);
-    return false;
-}
-
-function setWaitResponse() {
-    fbPad.querySelector('form').innerHTML = '';
-    fbPad.querySelector('form').classList.add('wait');
-}
 
 function fixAtCenter(obj, pad) {
     obj.style.left = ((pad.offsetWidth - obj.offsetWidth) / 2) + 'px';
     obj.style.top = ((pad.offsetHeight - obj.offsetHeight) / 2) + 'px';
 }
 
-function sendGetRequest(url, cbf) {
-    const xhr = new XMLHttpRequest();
-
-    xhr.onload = cbf;
-
-    xhr.onerror = xhr.onabort = (() => {
-        alert('HTTP request error');
-    });
-
-    xhr.open('GET', url, true);
-    xhr.send(null);
-
-}
-
-function sendPostRequest(url, pms, cbf) {
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = cbf;
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send(pms);
-}
-
-function feedBack(url) {
-    prepareFBPad();
-    sendGetRequest(url, fbResponse);
+function feedBack() {
+    if (!fbOn) {
+        let _fbf = document.querySelector('.fb_form_pad');
+        fixAtCenter(_fbf, document.body);
+        _fbf.classList.remove('off');
+        _fbf.classList.add('on');
+        document.querySelector('#email').focus();
+        fbOn = true;
+    }
     return false;
 }
 
-function fbResponse() {
-    if (this.readyState == 4) {
-        if (this.status == 200) {
-            let _r = JSON.parse(this.responseText);
-            switch (_r.dest) {
-                case 'sendform':
-                    fbPad.classList.remove('wait');
-                    fbPad.innerHTML = _r.form;
-                    fixAtCenter(fbPad, document.body);
-                    fbPad.querySelector('#email').focus();
-                    break;
-                case 'sendresp':
-                    fbPad.querySelector('form').classList.remove('wait');
-                    fbPad.querySelector('form').innerHTML = _r.response;
-                    fixAtCenter(fbPad, document.body);
-                    break;
-            }
-        } else
-            alert('HTTP request error.');
+function closeFBForm() {
+    if (fbOn) {
+        let _fbf = document.querySelector('.fb_form_pad');
+        _fbf.classList.remove('on');
+        _fbf.classList.add('off');
+        fbOn = false;
     }
+}
+
+function closeResponseForm() {
+    let _rf = document.querySelector('#app');
+    _rf.innerHTML = '';
+    _rf.classList.add('h');
 }
 
 function showDDMenu(src) {
@@ -115,7 +50,7 @@ function showDDMenu(src) {
 }
 
 function resetDDClose() {
-    if(mlt != 0) {
+    if (mlt != 0) {
         clearTimeout(mlt);
         mlt = 0;
     }

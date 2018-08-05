@@ -116,7 +116,7 @@ div.form_item {
     margin-bottom: 12px;
 }
 
-.form_item label {
+.form_item label, .form_item p {
     color: #636b6f;
     font-weight: 600;
     font-size: 10pt;

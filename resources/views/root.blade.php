@@ -17,7 +17,6 @@
 <header>
     @if (Route::has('login'))
         @auth
-            <a href="{{ url('/home') }}">Home</a>
         @else
             <div class="hdrtitle">{{ __('Admin Zone') }}</div>
             <nav>
@@ -25,12 +24,16 @@
                           onclick="document.location.href='{{ route('login') }}'; return false;"><a
                                 href="{{ route('login') }}">{{ __('Login') }}</a></span>
                 <span class="navigator"
-                      onclick="return feedBack('{{ route('feedback.get') }}');"><a
-                            href="{{ route('feedback.get') }}">{{ __('Feedback') }}</a></span>
+                      onclick="return feedBack();"><a
+                            href="#">{{ __('Feedback') }}</a></span>
             </nav>
             <br clear="all"/>
         @endauth
     @endif
 </header>
+@yield('content')
+@if(session()->get('msgsent'))
+    @yield('response')
+@endif
 </body>
 </html>
