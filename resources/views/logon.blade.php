@@ -23,8 +23,12 @@
 </head>
 <body>
 <header>
-    <div class="hdrtitle" onclick="document.location.href='{{ url("/") }}'; return false;"><a
-                href="{{ url('/') }}">{{ __('Admin Zone') }}</a></div>
+    @guest
+        <div class="hdrtitle" onclick="document.location.href='{{ url("/") }}'; return false;"><a
+                    href="{{ url('/') }}">{{ __('Admin Zone') }}</a></div>
+    @else
+        <div class="hdrtitle">{{ __('Admin Zone') }}</div>
+    @endguest
     <nav>
         @guest
             <span class="action">{{ __('Signing in') }}</span>
