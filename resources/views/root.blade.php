@@ -16,19 +16,35 @@
 <body>
 <header>
     @if (Route::has('login'))
-        @auth
-        @else
-            <div class="hdrtitle">{{ __('Admin Zone') }}</div>
-            <nav>
-                    <span class="navigator"
-                          onclick="document.location.href='{{ route('login') }}'; return false;"><a
-                                href="{{ route('login') }}">{{ __('Login') }}</a></span>
+        <div class="hdrtitle">{{ __('Admin Zone') }}</div>
+        <nav>
+            @auth
+                <span class="navigator" onclick="document.location.href='{{ route('emails') }}'; return false;"><a
+                            href="#">{{ __('E-mails') }}</a></span>
+            @else
                 <span class="navigator"
-                      onclick="return feedBack();"><a
-                            href="#">{{ __('Feedback') }}</a></span>
-            </nav>
-            <br clear="all"/>
-        @endauth
+                      onclick="document.location.href='{{ route('login') }}'; return false;"><a
+                            href="{{ route('login') }}">{{ __('Login') }}</a></span>
+            @endauth
+            <span class="navigator" onclick="return feedBack();"><a href="#">{{ __('Feedback') }}</a></span>
+            @auth
+                <span class="navigator" onmouseover="showDDMenu(this)" onmouseout="closeDDMenu()"
+                      onclick="return false;"><a
+                            href="#">{{ __(Auth::user()->name) }}</a></span>
+                <span class="action">{!! '@' !!}{{ ucfirst(Route::currentRouteName()) }}</span>
+                <div id="dd_menu" class="h">
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                          style="display: none;">
+                        @csrf
+                    </form>
+                </div>
+                @endauth
+        </nav>
+        <br clear="all"/>
     @endif
 </header>
 @yield('content')

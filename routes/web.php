@@ -9,4 +9,5 @@ Route::namespace('Auth')->group(function () {
     Route::get('/login', 'AuthController@showLoginForm')->name('login');
     Route::post('/login', 'AuthController@login');
     Route::post('/logout', 'AuthController@logout')->name('logout');
+
 });
